@@ -7,8 +7,13 @@ const App = () => {
 	const fetchGameData = async () => {
 		const apiKey = import.meta.env.VITE_APP_STEAM_API_KEY;
 		const response = await fetch(
-			`https://proxy.cors.sh/http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}`
+			`http://localhost:3000/getPlayerSummaries?key=${apiKey}&steamid=${steamId}`
 		);
+		if (!response.ok) {
+			const errorData = await response.json();
+			console.log(errorData);
+			return;
+		}
 		const data = await response.json();
 		setGameData(data.response.players[0]);
 	};
