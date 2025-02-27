@@ -1,4 +1,5 @@
 const express = require("express");
+const { fetch } = require("undici");
 
 const app = express();
 const port = 3000;
@@ -15,7 +16,6 @@ app.use((req, res, next) => {
 
 app.get("/getPlayerSummaries", async (req, res) => {
 	try {
-		const fetch = (await import("node-fetch")).default;
 		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
 
