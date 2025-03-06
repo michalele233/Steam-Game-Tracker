@@ -45,7 +45,7 @@ app.get("/getFriendList", async (req, res) => {
 	try {
 		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
-
+		const pageNumber = req.query.page || 1;
 		if (!apiKey || !steamId) {
 			throw new Error("Missing required parameters: key, steamid");
 		}
@@ -59,7 +59,11 @@ app.get("/getFriendList", async (req, res) => {
 		}
 
 		const data = await response.json();
-		res.json(data);
+		const friends = data.friendslist.friends.slice(
+			(pageNumber - 1) * 10,
+			pageNumber * 10
+		);
+		res.json(friends);
 	} catch (error) {
 		console.error("Error fetching friend list:", error.message || error);
 		res

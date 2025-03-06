@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 
-function useFetch(url, options = {}) {
+function useFetch(url, transfromData = null, options = {}) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,7 +17,10 @@ function useFetch(url, options = {}) {
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
-        const result = await response.json();
+        let result = await response.json();
+        if (transfromData) {
+          result = await transfromData(result);
+        }
         setData(result);
       } catch (err) {
         setError(err.message);
@@ -27,7 +30,7 @@ function useFetch(url, options = {}) {
     };
 
     fetchData();
-  }, [url, memoizedOptions]);
+  }, [url, memoizedOptions, transfromData]);
 
   return { data, loading, error };
 }
