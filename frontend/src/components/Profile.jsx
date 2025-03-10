@@ -20,6 +20,9 @@ export default function Profile({ steamId }) {
     }
   }, [profileInfo, steamId]);
 
+  useEffect(() => {
+    setSteamData(null);
+  }, [steamId]);
   const getPersonaState = (state) => {
     const states = [
       "Offline",
@@ -39,7 +42,7 @@ export default function Profile({ steamId }) {
   };
 
   return (
-    <>
+    <div className="flex h-full w-full flex-col items-center justify-center gap-3">
       {profileLoading && <p>Loading...</p>}
       {profileError && <p>Error: {profileError}</p>}
       {profileData && (
@@ -64,6 +67,6 @@ export default function Profile({ steamId }) {
           <p>Last Online: {formatLastLogoff(profileData.lastlogoff)}</p>
         </div>
       )}
-    </>
+    </div>
   );
 }

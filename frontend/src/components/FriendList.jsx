@@ -1,15 +1,21 @@
 import { useEffect, useState, useCallback } from "react";
 
 import { useFetch } from "../hooks/useFetch";
+
+const INITIAL_STATE = {
+  friendList: null,
+  friendListPage: 1,
+};
 export default function FriendList({ steamId, setSteamId }) {
-  const [friendList, setFriendList] = useState(null);
-  const [friendListPage, setFriendListPage] = useState(1);
+  const [{ friendList, friendListPage }, setFriendState] = useState({
+    ...INITIAL_STATE,
+  });
 
   const apiKey = import.meta.env.VITE_APP_STEAM_API_KEY;
 
   const addNameToFriendList = useCallback(
     async (friends) => {
-      for (const friend of friends) {
+      const fetchPromises = friends.map(async (friend) => {
         const response = await fetch(
           `http://localhost:3000/getPlayerSummaries?key=${apiKey}&steamid=${friend.steamid}`,
         );
@@ -19,37 +25,53 @@ export default function FriendList({ steamId, setSteamId }) {
         } else {
           friend.name = friend.steamid; // Fallback to SteamID if there's an error
         }
-      }
-      return friends;
+        return friend;
+      });
+      const updatedFriends = await Promise.all(fetchPromises);
+      return updatedFriends;
     },
     [apiKey],
   );
 
   const {
-    data: friendListData,
-    loading: friendLoading,
-    error: friendError,
+    data,
+    loading: dataLoading,
+    error: dataError,
   } = useFetch(
     `http://localhost:3000/getFriendList?key=${apiKey}&steamid=${steamId}&page=${friendListPage}`,
     addNameToFriendList,
   );
 
   useEffect(() => {
-    if (friendListData) {
-      setFriendList(friendListData);
+    if (data) {
+      setFriendState((prevState) => {
+        return {
+          ...prevState,
+          friendList: [...data],
+        };
+      });
     }
-  }, [friendListData, steamId]);
+  }, [data, steamId]);
+
+  useEffect(() => {
+    setFriendState({ ...INITIAL_STATE });
+  }, [steamId]);
   return (
-    <>
-      {friendLoading && <p>Loading...</p>}
-      {friendError && <p>Error: {friendError}</p>}
+    <div className="flex h-full w-full flex-col items-center justify-center gap-3">
+      {dataLoading && <p>Loading...</p>}
+      {dataError && <p>Profile is private or friend list is not public!</p>}
       {friendList && (
         <div className="flex flex-col items-center gap-3">
           <h2 className="mb-5 text-xl">Friend List</h2>
           <ul className="h-96 w-80 overflow-y-auto">
             {friendList.map((friend) => (
-              <li key={friend.steamid} className="mb-2">
-                <button onClick={() => setSteamId(friend.steamid)}>
+              <li key={friend.steamid} className="py-1">
+                <button
+                  className="h-full w-full rounded-md hover:cursor-pointer hover:bg-white hover:text-black"
+                  onClick={() => {
+                    setSteamId(friend.steamid);
+                  }}
+                >
                   {friend.name}
                 </button>
               </li>
@@ -57,6 +79,6 @@ export default function FriendList({ steamId, setSteamId }) {
           </ul>
         </div>
       )}
-    </>
+    </div>
   );
 }
