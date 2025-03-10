@@ -1,20 +1,8 @@
-const express = require("express");
-const { fetch } = require("undici");
+import express from "express";
 
-const app = express();
-const port = 3000;
+const router = express.Router();
 
-app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept"
-	);
-	next();
-});
-
-app.get("/getPlayerSummaries", async (req, res) => {
+router.get("/getPlayerSummaries", async (req, res) => {
 	try {
 		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
@@ -41,7 +29,7 @@ app.get("/getPlayerSummaries", async (req, res) => {
 	}
 });
 
-app.get("/getFriendList", async (req, res) => {
+router.get("/getFriendList", async (req, res) => {
 	try {
 		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
@@ -72,6 +60,4 @@ app.get("/getFriendList", async (req, res) => {
 	}
 });
 
-app.listen(port, () => {
-	console.log(`Server is running on port ${port}`);
-});
+export default router;

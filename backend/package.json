@@ -4,16 +4,19 @@
 	"description": "",
 	"license": "ISC",
 	"author": "Pieszko",
-	"type": "commonjs",
+	"type": "module",
 	"main": "app.js",
 	"scripts": {
-		"start": "nodemon app.js"
+		"start": "nodemon app.mjs"
 	},
 	"devDependencies": {
 		"nodemon": "^3.1.9"
 	},
 	"dependencies": {
 		"express": "^4.21.2",
-		"undici": "^7.3.0"
+		"express-session": "^1.18.1",
+		"node-fetch": "^3.3.2",
+		"passport": "^0.7.0",
+		"passport-steam": "^1.0.18"
 	}
 }
