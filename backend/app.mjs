@@ -1,9 +1,12 @@
 import express from "express";
-import router from "./routes/routes.mjs";
+import session from "express-session";
+import dotenv from "dotenv";
+import router from "./routes/ApiRouter.mjs";
+
+dotenv.config({ path: "../.env" });
 
 const app = express();
 const port = 3000;
-
 app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -15,6 +18,14 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use(
+	session({
+		secret: "secret",
+		saveUninitialized: false,
+		resave: false,
+	})
+);
+
 app.use(router);
 
 app.listen(port, () => {

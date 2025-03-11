@@ -1,7 +1,10 @@
 import { useState } from "react";
 
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
 import Profile from "./components/Profile";
 import FriendList from "./components/FriendList";
+import SteamContext from "./contexts/steam-context";
 
 const App = () => {
   const [steamId, setSteamId] = useState("76561198081891605");
@@ -15,16 +18,27 @@ const App = () => {
   const innerFlexContainerStyle =
     "w-full min-h-1/3 flex items-center justify-around";
 
+  const queryClient = new QueryClient();
+
   return (
-    <div className={backgroundStyle}>
-      <div className={containerStyle}>
-        <h1 className={headerStyle}>Steam Game Tracker</h1>
-        <div className={innerFlexContainerStyle}>
-          <Profile steamId={steamId}></Profile>
-          <FriendList steamId={steamId} setSteamId={setSteamId}></FriendList>
+    <QueryClientProvider client={queryClient}>
+      <SteamContext.Provider
+        value={{
+          steamId,
+          setSteamId,
+        }}
+      >
+        <div className={backgroundStyle}>
+          <div className={containerStyle}>
+            <h1 className={headerStyle}>Steam Game Tracker</h1>
+            <div className={innerFlexContainerStyle}>
+              <Profile />
+              <FriendList />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </SteamContext.Provider>
+    </QueryClientProvider>
   );
 };
 

@@ -1,28 +1,27 @@
-import { useEffect, useState } from "react";
-import { useFetch } from "../hooks/useFetch";
+import { useEffect, useState, useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-export default function Profile({ steamId }) {
-  const [profileData, setSteamData] = useState(null);
+import { fetchData } from "../util/http";
+
+import SteamContext from "../contexts/steam-context";
+export default function Profile() {
+  const { steamId } = useContext(SteamContext);
 
   const apiKey = import.meta.env.VITE_APP_STEAM_API_KEY;
 
   const {
-    data: profileInfo,
-    loading: profileLoading,
-    error: profileError,
-  } = useFetch(
-    `http://localhost:3000/getPlayerSummaries?key=${apiKey}&steamid=${steamId}`,
-  );
+    data: profileData,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
+    queryFn: () =>
+      fetchData(
+        `http://localhost:3000/getPlayerSummaries?key=${apiKey}&steamid=${steamId}`,
+      ),
+    queryKey: ["profile", steamId],
+  });
 
-  useEffect(() => {
-    if (profileInfo) {
-      setSteamData(profileInfo.response.players[0]);
-    }
-  }, [profileInfo, steamId]);
-
-  useEffect(() => {
-    setSteamData(null);
-  }, [steamId]);
   const getPersonaState = (state) => {
     const states = [
       "Offline",
@@ -43,15 +42,15 @@ export default function Profile({ steamId }) {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-3">
-      {profileLoading && <p>Loading...</p>}
-      {profileError && <p>Error: {profileError}</p>}
+      {isPending && <p>Loading...</p>}
+      {isError && <p>Error: {error.message}</p>}
       {profileData && (
-        <div className="flex flex-col items-center gap-3">
-          <h2 className="mb-5 text-xl">{profileData.personaname}</h2>
+        <div className="flex h-full flex-col items-center gap-4 p-4">
+          <h2 className="mb-3 text-2xl">{profileData.personaname}</h2>
           <img
             src={profileData.avatarfull}
             alt="Steam avatar"
-            className="mb-5 h-32 w-32 rounded-full"
+            className="mb-7 h-32 w-32 rounded-full"
           />
           <p>SteamID: {profileData.steamid}</p>
           <p>
@@ -64,7 +63,9 @@ export default function Profile({ steamId }) {
             </a>
           </p>
           <p>Person state: {getPersonaState(profileData.personastate)}</p>
-          <p>Last Online: {formatLastLogoff(profileData.lastlogoff)}</p>
+          {profileData.lastlogoff && (
+            <p>Last Online: {formatLastLogoff(profileData.lastlogoff)}</p>
+          )}
         </div>
       )}
     </div>

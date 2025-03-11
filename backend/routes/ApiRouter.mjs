@@ -20,7 +20,7 @@ router.get("/getPlayerSummaries", async (req, res) => {
 		}
 
 		const data = await response.json();
-		res.json(data);
+		res.json(data.response.players[0]);
 	} catch (error) {
 		console.error("Error fetching player summaries:", error.message || error);
 		res
