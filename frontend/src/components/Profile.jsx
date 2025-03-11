@@ -41,7 +41,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-3">
+    <>
       {isPending && <p>Loading...</p>}
       {isError && <p>Error: {error.message}</p>}
       {profileData && (
@@ -68,6 +68,6 @@ export default function Profile() {
           )}
         </div>
       )}
-    </div>
+    </>
   );
 }

@@ -31,6 +31,8 @@ router.get("/getPlayerSummaries", async (req, res) => {
 
 router.get("/getFriendList", async (req, res) => {
 	try {
+		const FRIEND_AMMOUNT = 8;
+
 		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
 		const pageNumber = req.query.page || 1;
@@ -48,8 +50,8 @@ router.get("/getFriendList", async (req, res) => {
 
 		const data = await response.json();
 		const friends = data.friendslist.friends.slice(
-			(pageNumber - 1) * 10,
-			pageNumber * 10
+			(pageNumber - 1) * FRIEND_AMMOUNT,
+			pageNumber * FRIEND_AMMOUNT
 		);
 		res.json(friends);
 	} catch (error) {
