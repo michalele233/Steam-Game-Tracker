@@ -1,13 +1,12 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchData } from "../util/http";
 
-import SteamContext from "../contexts/steam-context";
+import SteamContext from "../contexts/Steam-context";
+import ContentContainer from "../UI/ContentContainer";
 export default function Profile() {
-  const { steamId } = useContext(SteamContext);
-
-  const apiKey = import.meta.env.VITE_APP_STEAM_API_KEY;
+  const { steamId, apiKey } = useContext(SteamContext);
 
   const {
     data: profileData,
@@ -17,11 +16,10 @@ export default function Profile() {
   } = useQuery({
     queryFn: () =>
       fetchData(
-        `http://localhost:3000/getPlayerSummaries?key=${apiKey}&steamid=${steamId}`,
+        `http://localhost:3000/getPlayerSummaries?key=${apiKey}&steamids=${steamId}`,
       ),
     queryKey: ["profile", steamId],
   });
-
   const getPersonaState = (state) => {
     const states = [
       "Offline",
@@ -41,33 +39,33 @@ export default function Profile() {
   };
 
   return (
-    <>
+    <ContentContainer className="h-[410px] md:h-[600px]">
       {isPending && <p>Loading...</p>}
       {isError && <p>Error: {error.message}</p>}
       {profileData && (
-        <div className="flex h-full flex-col items-center gap-4 p-4">
-          <h2 className="mb-3 text-2xl">{profileData.personaname}</h2>
+        <div className="flex flex-col items-center space-y-4 p-4">
+          <h2 className="mb-3 text-2xl">{profileData[0].personaname}</h2>
           <img
-            src={profileData.avatarfull}
+            src={profileData[0].avatarfull}
             alt="Steam avatar"
             className="mb-7 h-32 w-32 rounded-full"
           />
-          <p>SteamID: {profileData.steamid}</p>
+          <p>SteamID: {profileData[0].steamid}</p>
           <p>
             Profile URL:{" "}
             <a
-              href={profileData.profileurl}
+              href={profileData[0].profileurl}
               className="underline hover:text-[#adadad]"
             >
               Link to a steam profile!
             </a>
           </p>
-          <p>Person state: {getPersonaState(profileData.personastate)}</p>
-          {profileData.lastlogoff && (
-            <p>Last Online: {formatLastLogoff(profileData.lastlogoff)}</p>
+          <p>Person state: {getPersonaState(profileData[0].personastate)}</p>
+          {profileData[0].lastlogoff && (
+            <p>Last Online: {formatLastLogoff(profileData[0].lastlogoff)}</p>
           )}
         </div>
       )}
-    </>
+    </ContentContainer>
   );
 }

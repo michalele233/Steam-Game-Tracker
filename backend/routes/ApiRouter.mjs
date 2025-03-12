@@ -5,14 +5,14 @@ const router = express.Router();
 router.get("/getPlayerSummaries", async (req, res) => {
 	try {
 		const apiKey = req.query.key;
-		const steamId = req.query.steamid;
+		const steamIds = req.query.steamids;
 
-		if (!apiKey || !steamId) {
+		if (!apiKey || !steamIds) {
 			throw new Error("Missing required parameters: key, steamid");
 		}
 
 		const response = await fetch(
-			`http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}`
+			`http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamIds}`
 		);
 
 		if (!response.ok) {
@@ -20,7 +20,12 @@ router.get("/getPlayerSummaries", async (req, res) => {
 		}
 
 		const data = await response.json();
-		res.json(data.response.players[0]);
+		if (data.response.players.length > 1) {
+			data.response.players.sort((a, b) => {
+				return steamIds.indexOf(a.steamid) - steamIds.indexOf(b.steamid);
+			});
+		}
+		res.json(data.response.players);
 	} catch (error) {
 		console.error("Error fetching player summaries:", error.message || error);
 		res
@@ -56,6 +61,37 @@ router.get("/getFriendList", async (req, res) => {
 		res.json(friends);
 	} catch (error) {
 		console.error("Error fetching friend list:", error.message || error);
+		res
+			.status(500)
+			.json({ message: "An error occurred", error: error.message });
+	}
+});
+
+router.get("/getRecentlyPlayedGames", async (req, res) => {
+	try {
+		const apiKey = req.query.key;
+		const steamId = req.query.steamid;
+		const count = 5; //numbers of games to display
+
+		if (!apiKey || !steamId) {
+			throw new Error("Missing required parameters: key, steamid");
+		}
+
+		const response = await fetch(
+			`http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${apiKey}&steamid=${steamId}&count=${count}`
+		);
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+
+		const data = await response.json();
+		res.json(data.response);
+	} catch (error) {
+		console.error(
+			"Error fetching players recently played games:",
+			error.message || error
+		);
 		res
 			.status(500)
 			.json({ message: "An error occurred", error: error.message });

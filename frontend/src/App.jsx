@@ -4,11 +4,15 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 import Profile from "./components/Profile";
 import FriendList from "./components/FriendList";
-import SteamContext from "./contexts/steam-context";
-import ContentContainer from "./components/ContentContainer";
+import SteamContext from "./contexts/Steam-context";
+import ContentContainer from "./UI/ContentContainer";
+import RecentlyPlayedGames from "./components/RecentlyPlayedGames";
+import Header from "./UI/Header";
+import Wrapper from "./UI/Wrapper";
 
 const App = () => {
   const [steamId, setSteamId] = useState("76561198081891605");
+  const [apiKey] = useState(import.meta.env.VITE_APP_STEAM_API_KEY);
 
   const queryClient = new QueryClient();
 
@@ -18,25 +22,17 @@ const App = () => {
         value={{
           steamId,
           setSteamId,
+          apiKey,
         }}
       >
-        <div className="flex h-dvh w-dvw justify-center bg-[url(../background-image.png)] text-white">
-          <div className="flex h-full w-[75%] flex-col items-center gap-4 bg-[#1b1819] py-2 shadow-[0px_0px_70px_10px_rgba(0,0,0,1)]">
-            <header>
-              <h1 className="mb-2 pt-3 text-4xl font-bold">
-                Steam Game Tracker
-              </h1>
-            </header>
-            <main className="flex size-full items-center justify-around">
-              <ContentContainer>
-                <Profile />
-              </ContentContainer>
-              <ContentContainer>
-                <FriendList />
-              </ContentContainer>
-            </main>
-          </div>
-        </div>
+        <Wrapper>
+          <Header />
+          <main className="grid-rows-auto grid min-h-screen w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-x-32 md:gap-y-8">
+            <Profile />
+            <FriendList />
+            <RecentlyPlayedGames />
+          </main>
+        </Wrapper>
       </SteamContext.Provider>
     </QueryClientProvider>
   );
