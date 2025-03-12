@@ -1,9 +1,12 @@
 import { createContext } from "react";
 
 const SteamContext = createContext({
+  initialSteamId: null,
+  apiKey: null,
   steamId: null,
   setSteamId: () => {},
-  apiKey: null,
+  isPublic: true,
+  setIsPublic: () => {},
 });
 
 export default SteamContext;

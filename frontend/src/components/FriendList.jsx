@@ -6,11 +6,13 @@ import { fetchData } from "../util/http";
 import SteamContext from "../contexts/Steam-context";
 import FriendListControl from "./FriendListControl";
 import ContentContainer from "../UI/ContentContainer";
+import Button from "../UI/Button";
 
 export default function FriendList() {
   const [friendListPage, setFriendListPage] = useState(1);
 
-  const { steamId, setSteamId, apiKey } = useContext(SteamContext);
+  const { initialSteamId, steamId, setSteamId, apiKey } =
+    useContext(SteamContext);
 
   useEffect(() => {
     setFriendListPage(1);
@@ -48,7 +50,20 @@ export default function FriendList() {
     <ContentContainer className="h-[600px]">
       {isPending && <p>Loading...</p>}
       {isError && (
-        <p>Profile is private or friend list is not public! {error.message}</p>
+        <div className="flex flex-col items-center space-y-4 p-4 pb-0">
+          <h2 className="mb-2 text-2xl">Error</h2>
+          <p>
+            {error.status === 401
+              ? "Profile is private and we couldn't fetch data!"
+              : error.message}
+          </p>
+          <Button
+            className="bg-white p-3 text-black"
+            onClick={() => setSteamId(initialSteamId)}
+          >
+            Back to your profile!
+          </Button>
+        </div>
       )}
       {friendList && (
         <div className="flex h-full flex-col items-center space-y-4 p-4 pb-0">

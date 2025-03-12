@@ -1,11 +1,11 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "../util/http";
 
 import SteamContext from "../contexts/Steam-context";
 import ContentContainer from "../UI/ContentContainer";
 export default function RecentlyPlayedGames() {
-  const { steamId, apiKey } = useContext(SteamContext);
+  const { steamId, apiKey, setIsPublic } = useContext(SteamContext);
 
   const {
     data: gamesData,
@@ -19,7 +19,9 @@ export default function RecentlyPlayedGames() {
       ),
     queryKey: ["recentlyPlayedGames", steamId],
   });
-
+  useEffect(() => {
+    if (!gamesData && !isPending) setIsPublic(false);
+  }, [gamesData]);
   function calculateGameTime(playtime) {
     const hours = Math.floor(playtime / 60);
     const minutes = playtime % 60;
@@ -43,13 +45,12 @@ export default function RecentlyPlayedGames() {
 
     return `${hours} hours ${minutes} minutes`;
   }
-
   return (
     <ContentContainer>
       {isPending && <p>Loading...</p>}
       {isError && <p>Error: {error.message}</p>}
       {gamesData && (
-        <div className="flex flex-col items-center space-y-4">
+        <div className="mb-8 flex flex-col items-center space-y-4">
           <h2 className="text-2xl">Recently Played Games</h2>
           {gamesData.total_count === 0 && (
             <p>No games played in the last 2 weeks</p>

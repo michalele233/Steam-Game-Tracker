@@ -16,16 +16,16 @@ export default function FriendListControl({
 
   const backButtonStyle =
     friendListPage > 1
-      ? "h-7 w-7 bg-white text-black"
-      : "h-7 w-7 bg-white text-black invisible";
+      ? "h-9 w-9 bg-white text-black"
+      : "h-9 w-9 bg-white text-black invisible";
 
   const forwardButtonStyle =
     FriendListLength === 8
-      ? "h-7 w-7 bg-white text-black"
-      : "h-7 w-7 bg-white text-black invisible";
+      ? "h-9 w-9 bg-white text-black"
+      : "h-9 w-9 bg-white text-black invisible";
 
   return (
-    <div className="mt-4 flex gap-8">
+    <div className="mt-4 flex items-center gap-8">
       <Button className={backButtonStyle} onClick={() => handlePageChange("-")}>
         ←
       </Button>

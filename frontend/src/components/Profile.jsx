@@ -20,7 +20,7 @@ export default function Profile() {
       ),
     queryKey: ["profile", steamId],
   });
-  const getPersonaState = (state) => {
+  const getPersonState = (state) => {
     const states = [
       "Offline",
       "Online",
@@ -57,10 +57,10 @@ export default function Profile() {
               href={profileData[0].profileurl}
               className="underline hover:text-[#adadad]"
             >
-              Link to a steam profile!
+              Link to profile!
             </a>
           </p>
-          <p>Person state: {getPersonaState(profileData[0].personastate)}</p>
+          <p>Person state: {getPersonState(profileData[0].personastate)}</p>
           {profileData[0].lastlogoff && (
             <p>Last Online: {formatLastLogoff(profileData[0].lastlogoff)}</p>
           )}
