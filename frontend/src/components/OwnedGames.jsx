@@ -1,13 +1,16 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "../util/http";
 
 import SteamContext from "../contexts/Steam-context";
-
+import ListControl from "./ListControl";
 import ContentContainer from "../UI/ContentContainer";
 import FetchError from "../UI/FetchError";
-export default function RecentlyPlayedGames() {
+export default function OwnedGames() {
   const { steamId, apiKey } = useContext(SteamContext);
+  const [ownedGamesPage, setOwnedGamesPage] = useState(1);
+
+  const GAMES_PER_PAGE = 5;
 
   const {
     data: gamesData,
@@ -17,9 +20,9 @@ export default function RecentlyPlayedGames() {
   } = useQuery({
     queryFn: () =>
       fetchData(
-        `http://localhost:3000/getRecentlyPlayedGames?key=${apiKey}&steamid=${steamId}`,
+        `http://localhost:3000/getOwnedGames?key=${apiKey}&steamid=${steamId}`,
       ),
-    queryKey: ["recentlyPlayedGames", steamId],
+    queryKey: ["ownedGames", steamId],
   });
 
   function calculateGameTime(playtime) {
@@ -45,22 +48,29 @@ export default function RecentlyPlayedGames() {
 
     return `${hours} hours ${minutes} minutes`;
   }
+  const gamesOnPage = gamesData?.games?.slice(
+    (ownedGamesPage - 1) * GAMES_PER_PAGE,
+    ownedGamesPage * GAMES_PER_PAGE,
+  );
   return (
-    <ContentContainer>
+    <ContentContainer className="md:h-[720px]">
       {isPending && <p>Loading...</p>}
       {isError && <FetchError error={error} />}
       {gamesData && (
         <div className="mb-8 flex flex-col items-center space-y-4">
-          <h2 className="text-2xl">Recently Played Games</h2>
+          <h2 className="text-2xl">Owned Games</h2>
           {(gamesData.total_count === 0 ||
-            Object.keys(gamesData).length === 0) && (
-            <p>No games played in the last 2 weeks!</p>
+            Object.keys(gamesData).length === 0 ||
+            gamesData.games.length === 0) && (
+            <p className="text-center">
+              No games played ever or owned games data is private!
+            </p>
           )}
-          {gamesData.games && (
-            <ul>
-              {gamesData.games.map((game) => (
-                <li key={game.appid} className="py-2">
-                  <div className="flex items-center gap-2">
+          {gamesOnPage && gamesOnPage?.length > 0 && (
+            <ul className="min-h-[600px]">
+              {gamesOnPage.map((game) => (
+                <li key={game.appid} className="w-[300px]">
+                  <div className="flex h-[120px] w-full items-center gap-4">
                     <img
                       src={`http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`}
                       alt={game.name}
@@ -68,13 +78,20 @@ export default function RecentlyPlayedGames() {
                     />
                     <div>
                       <p>{game.name}</p>
-                      <p>{`${calculateGameTime(game.playtime_2weeks)} in last two weeks`}</p>
                       <p>{`${calculateGameTime(game.playtime_forever)} in total`}</p>
                     </div>
                   </div>
                 </li>
               ))}
             </ul>
+          )}
+          {gamesOnPage && gamesOnPage?.length > 0 && (
+            <ListControl
+              listPage={ownedGamesPage}
+              setListPage={setOwnedGamesPage}
+              listLength={gamesOnPage.length}
+              elementsPerPage={GAMES_PER_PAGE}
+            />
           )}
         </div>
       )}

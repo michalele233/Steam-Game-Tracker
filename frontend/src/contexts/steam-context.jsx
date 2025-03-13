@@ -5,8 +5,6 @@ const SteamContext = createContext({
   apiKey: null,
   steamId: null,
   setSteamId: () => {},
-  isPublic: true,
-  setIsPublic: () => {},
 });
 
 export default SteamContext;
