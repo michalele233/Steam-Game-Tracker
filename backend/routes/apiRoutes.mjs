@@ -1,6 +1,6 @@
 import express from "express";
 
-const router = express.Router();
+const apiRouter = express.Router();
 
 class HttpError extends Error {
 	constructor(message, status) {
@@ -19,7 +19,7 @@ const handleHttpResponse = async response => {
 	return response.json();
 };
 
-router.get("/getPlayerSummaries", async (req, res) => {
+apiRouter.get("/getPlayerSummaries", async (req, res) => {
 	try {
 		const apiKey = req.query.key;
 		const steamIds = req.query.steamids;
@@ -49,7 +49,7 @@ router.get("/getPlayerSummaries", async (req, res) => {
 	}
 });
 
-router.get("/getFriendList", async (req, res) => {
+apiRouter.get("/getFriendList", async (req, res) => {
 	try {
 		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
@@ -75,7 +75,7 @@ router.get("/getFriendList", async (req, res) => {
 	}
 });
 
-router.get("/getRecentlyPlayedGames", async (req, res) => {
+apiRouter.get("/getRecentlyPlayedGames", async (req, res) => {
 	try {
 		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
@@ -104,7 +104,7 @@ router.get("/getRecentlyPlayedGames", async (req, res) => {
 	}
 });
 
-router.get("/getOwnedGames", async (req, res) => {
+apiRouter.get("/getOwnedGames", async (req, res) => {
 	try {
 		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
@@ -140,4 +140,4 @@ router.get("/getOwnedGames", async (req, res) => {
 		});
 	}
 });
-export default router;
+export default apiRouter;
