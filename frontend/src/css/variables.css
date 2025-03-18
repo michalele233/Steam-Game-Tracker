@@ -1,0 +1,13 @@
+:root {
+	--background-gradient: linear-gradient(
+		90deg,
+		rgb(92, 33, 222) 0%,
+		rgb(151, 116, 225) 49%,
+		rgb(165, 135, 235) 100%
+	);
+	--glass-gradient: linear-gradient(
+		to right top,
+		rgba(0, 0, 0, 0.75),
+		rgba(0, 0, 0, 0.5)
+	);
+}

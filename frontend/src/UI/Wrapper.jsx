@@ -1,12 +1,9 @@
-import { useContext } from "react";
-import SteamContext from "../contexts/Steam-context";
-
 export default function Wrapper({ children }) {
-  return (
-    <div className="flex min-h-screen justify-center bg-[url(../background-image.png)] text-white">
-      <div className="flex w-full max-w-md flex-col items-center space-y-4 bg-[#1b1819] py-2 shadow-[0px_0px_70px_10px_rgba(0,0,0,1)] md:max-w-2xl lg:max-w-4xl xl:max-w-6xl">
-        {children}
-      </div>
-    </div>
-  );
+	return (
+		<div className='flex min-h-screen justify-center bg-[#250076] bg-(image:--background-gradient) text-secondary'>
+			<div className='w-full h-full max-w-md rounded-3xl bg-background bg-(image:--glass-gradient) my-8 shadow-background md:max-w-2xl lg:max-w-4xl xl:max-w-6xl	'>
+				{children}
+			</div>
+		</div>
+	);
 }

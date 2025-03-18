@@ -4,10 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "../util/http";
 import { getCountryName } from "../util/isoCodeToCountries";
 
-import SteamContext from "../contexts/steam-context";
+import SteamContext from "../contexts/Steam-context";
 import ContentContainer from "../UI/ContentContainer";
 import FetchError from "../UI/FetchError";
 import Button from "../UI/Button";
+import PersonState from "./PersonState";
 export default function Profile() {
 	const { initialSteamId, steamId, setSteamId, apiKey } =
 		useContext(SteamContext);
@@ -24,18 +25,6 @@ export default function Profile() {
 			),
 		queryKey: ["profile", steamId],
 	});
-	const getPersonState = state => {
-		const states = [
-			"Offline",
-			"Online",
-			"Busy",
-			"Away",
-			"Snooze",
-			"Looking to trade",
-			"Looking to play",
-		];
-		return states[state];
-	};
 
 	const formatLastLogoff = lastlogoff => {
 		const date = new Date(lastlogoff * 1000);
@@ -43,7 +32,7 @@ export default function Profile() {
 	};
 
 	return (
-		<ContentContainer className='h-[410px] md:h-[600px]'>
+		<ContentContainer className='md:h-[600px]'>
 			{isPending && <p>Loading...</p>}
 			{isError && <FetchError error={error} />}
 			{profileData && (
@@ -52,30 +41,45 @@ export default function Profile() {
 					<img
 						src={profileData[0].avatarfull}
 						alt='Steam avatar'
-						className='mb-7 h-32 w-32 rounded-full'
+						className='mb-7 h-32 w-32 rounded-full border-[1px] border-white'
 					/>
 					{profileData[0].realname && (
-						<p>Real name: {profileData[0].realname}</p>
-					)}
-					<p>SteamID: {profileData[0].steamid}</p>
-					{profileData[0].loccountrycode && (
-						<p>Country: {getCountryName(profileData[0].loccountrycode)}</p>
+						<p>
+							<span className='font-bold'>Real name:</span>{" "}
+							{profileData[0].realname}
+						</p>
 					)}
 					<p>
-						Profile URL:{" "}
+						<span className='font-bold'>SteamID:</span> {profileData[0].steamid}
+					</p>
+					{profileData[0].loccountrycode && (
+						<p>
+							<span className='font-bold'>Country:</span>{" "}
+							{getCountryName(profileData[0].loccountrycode)}
+							<img
+								className='inline-block ml-2'
+								src={`https://flagsapi.com/${profileData[0].loccountrycode}/flat/16.png`}></img>
+						</p>
+					)}
+					<p className='relative'>
+						<span className='font-bold'>Profile URL:</span>{" "}
 						<a
 							href={profileData[0].profileurl}
-							className='underline hover:text-[#adadad]'>
+							className='text-primary after:content-[""] after:w-0 after:h-[2px] after:absolute after:bottom-0 after:right-0 after:bg-primary hover:after:w-[102px] after:transition-[width] 
+							'>
 							Link to profile!
 						</a>
 					</p>
-					<p>Person state: {getPersonState(profileData[0].personastate)}</p>
+					<PersonState personState={profileData[0].personastate} />
 					{profileData[0].lastlogoff && (
-						<p>Last Online: {formatLastLogoff(profileData[0].lastlogoff)}</p>
+						<p>
+							<span className='font-bold'>Last Online:</span>{" "}
+							{formatLastLogoff(profileData[0].lastlogoff)}
+						</p>
 					)}
 					{steamId !== initialSteamId && (
 						<Button
-							className='mt-5 bg-white p-3 text-black'
+							className='mt-5 p-3'
 							onClick={() => setSteamId(initialSteamId)}>
 							Back to your profile!
 						</Button>

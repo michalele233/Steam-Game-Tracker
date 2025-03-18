@@ -66,7 +66,7 @@ export default function OwnedGames() {
 							No games played ever or owned games data is private!
 						</p>
 					)}
-					{gamesData && (
+					{gamesOnPage && (
 						<ul className='min-h-[600px]'>
 							{gamesOnPage.map(game => (
 								<li key={game.appid} className='w-[300px]'>
@@ -74,7 +74,7 @@ export default function OwnedGames() {
 										<img
 											src={`http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`}
 											alt={game.name}
-											className='h-10 w-10'
+											className='h-10 w-10 border-[1px] border-white'
 										/>
 										<div>
 											<p>{game.name}</p>
@@ -85,11 +85,11 @@ export default function OwnedGames() {
 							))}
 						</ul>
 					)}
-					{gamesData && (
+					{gamesOnPage?.length > 0 && (
 						<ListControl
 							listPage={ownedGamesPage}
 							setListPage={setOwnedGamesPage}
-							listLength={gamesOnPage.length}
+							fullListLength={gamesData.games.length}
 							elementsPerPage={GAMES_PER_PAGE}
 						/>
 					)}

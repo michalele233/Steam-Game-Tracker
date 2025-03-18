@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
+import SteamContext from "./contexts/Steam-context";
+
+import Header from "./components/Header";
 import Profile from "./components/Profile";
 import FriendList from "./components/FriendList";
-import SteamContext from "./contexts/steam-context";
-import RecentlyPlayedGames from "./components/RecentlyPlayedGames";
 import OwnedGames from "./components/OwnedGames";
+import RecentlyPlayedGames from "./components/RecentlyPlayedGames";
+import Footer from "./components/Footer";
 
-import Header from "./UI/Header";
 import Wrapper from "./UI/Wrapper";
 
 const App = () => {
@@ -31,7 +33,7 @@ const App = () => {
 	}, []);
 
 	const mainClasses =
-		"grid-rows-auto grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:gap-y-12";
+		"grid-rows-auto grid my-5 md:mt-0 w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:gap-y-12";
 
 	return (
 		<QueryClientProvider client={queryClient}>
@@ -54,6 +56,7 @@ const App = () => {
 							<OwnedGames />
 						</main>
 					)}
+					<Footer />
 				</Wrapper>
 			</SteamContext.Provider>
 		</QueryClientProvider>
