@@ -8,6 +8,7 @@ steamRouter.get("/logout", function (req, res) {
 		if (err) {
 			return next(err);
 		}
+		req.session.destroy();
 		res.redirect("http://localhost:5173");
 	});
 });
@@ -21,10 +22,21 @@ steamRouter.get(
 	"/auth/steam/return",
 	passport.authenticate("steam", { failureRedirect: "/" }),
 	function (req, res) {
-		res.redirect(
-			`http://localhost:5173?steamid=${req.user._json.steamid}&isAuthenticated=true`
-		);
+		req.session.steamid = req.user._json.steamid;
+		req.session.isAuthenticated = true;
+		res.redirect("http://localhost:5173");
 	}
 );
+
+steamRouter.get("/auth/status", (req, res) => {
+	if (req.session.steamid && req.session.isAuthenticated) {
+		res.json({
+			steamid: req.session.steamid,
+			isAuthenticated: req.session.isAuthenticated,
+		});
+	} else {
+		res.status(401).json({ message: "Not authenticated" });
+	}
+});
 
 export default steamRouter;

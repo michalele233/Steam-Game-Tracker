@@ -21,15 +21,22 @@ const App = () => {
 	const queryClient = new QueryClient();
 
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		const steamid = urlParams.get("steamid");
-		const authenticated = urlParams.get("isAuthenticated");
-
-		if (steamid && authenticated) {
-			setSteamId(steamid);
-			setInitialSteamId(steamid);
-			setIsAuthenticated(true);
-		}
+		const fetchAuthStatus = async () => {
+			try {
+				const response = await fetch("http://localhost:3000/auth/status", {
+					credentials: "include",
+				});
+				if (response.ok) {
+					const data = await response.json();
+					setSteamId(data.steamid);
+					setInitialSteamId(data.steamid);
+					setIsAuthenticated(data.isAuthenticated);
+				}
+			} catch (error) {
+				console.error("Failed to fetch authentication status:", error);
+			}
+		};
+		fetchAuthStatus();
 	}, []);
 
 	const mainClasses =

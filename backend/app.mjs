@@ -12,12 +12,13 @@ dotenv.config({ path: "../.env" });
 const app = express();
 const port = 3000;
 app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Origin", "http://localhost:5173");
 	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 	res.header(
 		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept"
+		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
 	);
+	res.header("Access-Control-Allow-Credentials", "true");
 	next();
 });
 
@@ -52,6 +53,7 @@ app.use(
 		secret: "secret",
 		saveUninitialized: false,
 		resave: false,
+		cookie: { secure: false, httpOnly: true }, //secure:true for https then add sameSite: "None" for cross-site cookies
 	})
 );
 
