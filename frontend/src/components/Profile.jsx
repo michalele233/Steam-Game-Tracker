@@ -36,12 +36,12 @@ export default function Profile() {
 			{isPending && <p>Loading...</p>}
 			{isError && <FetchError error={error} />}
 			{profileData && (
-				<div className='flex flex-col items-center space-y-4 p-4'>
+				<div className='flex flex-col items-center space-y-4 p-4 text-lg md:max-lg:text-base'>
 					<h2 className='mb-8 text-2xl'>{profileData[0].personaname}</h2>
 					<img
 						src={profileData[0].avatarfull}
 						alt='Steam avatar'
-						className='mb-7 h-32 w-32 rounded-full border-[1px] border-white'
+						className='h-48 w-48 rounded-full border-[2px] border-primary'
 					/>
 					{profileData[0].realname && (
 						<p>
@@ -65,7 +65,7 @@ export default function Profile() {
 						<span className='font-bold'>Profile URL:</span>{" "}
 						<a
 							href={profileData[0].profileurl}
-							className='text-primary after:content-[""] after:w-0 after:h-[2px] after:absolute after:bottom-0 after:right-0 after:bg-primary hover:after:w-[102px] after:transition-[width] 
+							className='text-primary after:content-[""] after:w-0 after:h-[2px] after:absolute after:bottom-0 after:right-0 after:bg-primary hover:after:w-[114px] after:transition-[width] 
 							'>
 							Link to profile!
 						</a>

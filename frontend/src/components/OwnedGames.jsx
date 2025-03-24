@@ -1,3 +1,4 @@
+//wyeksportuj funcje calcluateGameTime
 import { useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "../util/http";
@@ -66,7 +67,7 @@ export default function OwnedGames() {
 							No games played ever or owned games data is private!
 						</p>
 					)}
-					{gamesOnPage && (
+					{gamesOnPage?.length > 0 && (
 						<ul className='min-h-[600px]'>
 							{gamesOnPage.map(game => (
 								<li key={game.appid} className='w-[300px]'>

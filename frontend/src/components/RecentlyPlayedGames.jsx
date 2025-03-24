@@ -54,7 +54,7 @@ export default function RecentlyPlayedGames() {
 					<h2 className='text-2xl'>Recently Played Games</h2>
 					{(gamesData.total_count === 0 ||
 						Object.keys(gamesData).length === 0) && (
-						<p>No games played in the last 2 weeks!</p>
+						<p className='text-center'>No games played in the last 2 weeks!</p>
 					)}
 					{gamesData.games && (
 						<ul>
