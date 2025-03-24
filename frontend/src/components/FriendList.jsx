@@ -1,3 +1,5 @@
+///TODO: Dostosuj szerokosc przyciskow debilu bo za waski jest i jak bedzie 32 znaki to bedzie sie rozszerzal nie wiem czemu
+
 import { useEffect, useState, useCallback, useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -8,6 +10,7 @@ import ListControl from "./ListControl";
 import ContentContainer from "../UI/ContentContainer";
 import FetchError from "../UI/FetchError";
 import Button from "../UI/Button";
+import ImageComponent from "./ImageComponent";
 
 export default function FriendList() {
 	const [friendListPage, setFriendListPage] = useState(1);
@@ -63,17 +66,19 @@ export default function FriendList() {
 					<h2 className='mb-2 text-2xl'>Friend List</h2>
 					<ul className='min-h-[420px]'>
 						{friendsOnPage.map(friend => (
-							<li key={friend.steamid} className='min-w-[300px] py-2'>
+							<li
+								key={friend.steamid}
+								className='min-w-[300px] text-sm lg:text-base lg:min-w-[320px] py-2'>
 								<Button
-									className='size-full p-1.5 hover:scale-110 md:hover:scale-150 transition-transform'
+									className='size-full p-1.5 hover:scale-110 xs:hover:scale-125 lg:hover:scale-150 transition-transform'
 									onClick={() => {
 										setSteamId(friend.steamid);
 									}}>
 									<div className='flex items-center gap-2'>
-										<img
+										<ImageComponent
 											src={friend.avatar}
 											alt={`${friend.personaname}'s avatar`}
-											className='h-8 w-8 rounded-full'></img>
+											className='h-8 w-8 rounded-full'></ImageComponent>
 										<span>{friend.personaname}</span>
 									</div>
 								</Button>

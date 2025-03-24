@@ -8,4 +8,13 @@
 	--color-primary-light: #a080fa;
 	--color-primary-dark: #5b2e99;
 	--color-secondary: #ced3dc;
+
+	--breakpoint-xs: 30rem;
+
+	--font-primary: "Roboto", sans-serif;
+}
+
+@font-face {
+	font-family: "Roboto";
+	src: url("/fonts/RobotoRegular.ttf") format("truetype");
 }

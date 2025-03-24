@@ -46,7 +46,7 @@ export default function RecentlyPlayedGames() {
 		return `${hours} hours ${minutes} minutes`;
 	}
 	return (
-		<ContentContainer>
+		<ContentContainer className='md:ml-5'>
 			{isPending && <p>Loading...</p>}
 			{isError && <FetchError error={error} />}
 			{gamesData && (

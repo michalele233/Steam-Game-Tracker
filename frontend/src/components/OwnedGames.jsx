@@ -53,7 +53,7 @@ export default function OwnedGames() {
 		ownedGamesPage * GAMES_PER_PAGE
 	);
 	return (
-		<ContentContainer className='md:h-[720px]'>
+		<ContentContainer className='md:h-[720px] md:mr-5'>
 			{isPending && <p>Loading...</p>}
 			{isError && <FetchError error={error} />}
 			{gamesData && (
