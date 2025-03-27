@@ -10,8 +10,7 @@ import FetchError from "../UI/FetchError";
 import Button from "../UI/Button";
 import PersonState from "./PersonState";
 export default function Profile() {
-	const { initialSteamId, steamId, setSteamId, apiKey } =
-		useContext(SteamContext);
+	const { initialSteamId, steamId, setSteamId } = useContext(SteamContext);
 
 	const {
 		data: profileData,
@@ -21,7 +20,7 @@ export default function Profile() {
 	} = useQuery({
 		queryFn: () =>
 			fetchData(
-				`http://localhost:3000/getPlayerSummaries?key=${apiKey}&steamids=${steamId}`
+				`https://51.21.65.188:3000/getPlayerSummaries?steamids=${steamId}`
 			),
 		queryKey: ["profile", steamId],
 	});

@@ -6,13 +6,14 @@ import SteamStrategy from "passport-steam";
 
 import apiRouter from "./routes/apiRoutes.mjs";
 import steamRouter from "./routes/steamAuthRoutes.mjs";
+import apiKey from "../getApiKey.js";
 
 dotenv.config({ path: "../.env" });
 
 const app = express();
 const port = 3000;
 app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+	res.header("Access-Control-Allow-Origin", "https://michalele233.github.io");
 	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 	res.header(
 		"Access-Control-Allow-Headers",
@@ -33,9 +34,9 @@ passport.deserializeUser(function (obj, done) {
 passport.use(
 	new SteamStrategy(
 		{
-			returnURL: "http://localhost:3000/auth/steam/return",
-			realm: "http://localhost:3000/",
-			apiKey: process.env.VITE_APP_STEAM_API_KEY,
+			returnURL: "http://51.21.65.188:3000/auth/steam/return",
+			realm: "http://51.21.65.188:3000/",
+			apiKey: apiKey,
 		},
 		function (identifier, profile, done) {
 			process.nextTick(function () {

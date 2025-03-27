@@ -9,7 +9,7 @@ steamRouter.get("/logout", function (req, res) {
 			return next(err);
 		}
 		req.session.destroy();
-		res.redirect("http://localhost:5173");
+		res.redirect("http://https://michalele233.github.io/Steam-Game-Tracker/");
 	});
 });
 
@@ -24,7 +24,7 @@ steamRouter.get(
 	function (req, res) {
 		req.session.steamid = req.user._json.steamid;
 		req.session.isAuthenticated = true;
-		res.redirect("http://localhost:5173");
+		res.redirect("http://https://michalele233.github.io/Steam-Game-Tracker/");
 	}
 );
 

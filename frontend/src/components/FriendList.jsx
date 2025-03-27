@@ -15,7 +15,7 @@ import ImageComponent from "./ImageComponent";
 export default function FriendList() {
 	const [friendListPage, setFriendListPage] = useState(1);
 
-	const { steamId, setSteamId, apiKey } = useContext(SteamContext);
+	const { steamId, setSteamId } = useContext(SteamContext);
 
 	const FRIEND_PER_PAGE = 7;
 
@@ -23,20 +23,17 @@ export default function FriendList() {
 		setFriendListPage(1);
 	}, [steamId]);
 
-	const addNameToFriendList = useCallback(
-		async friends => {
-			const maxFriends = friends.splice(0, 100); // Steam API only allows 100 friends per request
-			const friendIds = maxFriends.map(friend => friend.steamid).join(",");
-			const response = await fetch(
-				`http://localhost:3000/getPlayerSummaries?key=${apiKey}&steamids=${friendIds}`
-			);
-			if (response.ok) {
-				const data = await response.json();
-				return data;
-			}
-		},
-		[apiKey]
-	);
+	const addNameToFriendList = useCallback(async friends => {
+		const maxFriends = friends.splice(0, 100); // Steam API only allows 100 friends per request
+		const friendIds = maxFriends.map(friend => friend.steamid).join(",");
+		const response = await fetch(
+			`https://51.21.65.188:3000/getPlayerSummaries?steamids=${friendIds}`
+		);
+		if (response.ok) {
+			const data = await response.json();
+			return data;
+		}
+	}, []);
 
 	const {
 		data: friendList,
@@ -46,7 +43,7 @@ export default function FriendList() {
 	} = useQuery({
 		queryFn: () =>
 			fetchData(
-				`http://localhost:3000/getFriendList?key=${apiKey}&steamid=${steamId}`,
+				`https://51.21.65.188:3000/getFriendList?steamid=${steamId}`,
 				addNameToFriendList
 			),
 		queryKey: ["friendList", steamId],

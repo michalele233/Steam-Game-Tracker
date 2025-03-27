@@ -15,7 +15,6 @@ import Wrapper from "./UI/Wrapper";
 const App = () => {
 	const [steamId, setSteamId] = useState(null);
 	const [initialSteamId, setInitialSteamId] = useState(null);
-	const [apiKey] = useState(import.meta.env.VITE_APP_STEAM_API_KEY);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	const queryClient = new QueryClient();
@@ -23,7 +22,7 @@ const App = () => {
 	useEffect(() => {
 		const fetchAuthStatus = async () => {
 			try {
-				const response = await fetch("http://localhost:3000/auth/status", {
+				const response = await fetch("https://51.21.65.188:3000/auth/status", {
 					credentials: "include",
 				});
 				if (response.ok) {
@@ -47,7 +46,6 @@ const App = () => {
 			<SteamContext.Provider
 				value={{
 					initialSteamId,
-					apiKey,
 					steamId,
 					setSteamId,
 					isAuthenticated,

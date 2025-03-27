@@ -1,4 +1,5 @@
 import express from "express";
+import apiKey from "../getApiKey.js";
 
 const apiRouter = express.Router();
 
@@ -21,11 +22,10 @@ const handleHttpResponse = async response => {
 
 apiRouter.get("/getPlayerSummaries", async (req, res) => {
 	try {
-		const apiKey = req.query.key;
 		const steamIds = req.query.steamids;
 
-		if (!apiKey || !steamIds) {
-			throw new HttpError("Missing required parameters: key, steamid", 400);
+		if (!steamIds) {
+			throw new HttpError("Missing required parameters: steamid", 400);
 		}
 
 		const response = await fetch(
@@ -51,10 +51,10 @@ apiRouter.get("/getPlayerSummaries", async (req, res) => {
 
 apiRouter.get("/getFriendList", async (req, res) => {
 	try {
-		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
-		if (!apiKey || !steamId) {
-			throw new HttpError("Missing required parameters: key, steamid", 400);
+
+		if (!steamId) {
+			throw new HttpError("Missing required parameters: steamid", 400);
 		}
 
 		const response = await fetch(
@@ -77,11 +77,10 @@ apiRouter.get("/getFriendList", async (req, res) => {
 
 apiRouter.get("/getRecentlyPlayedGames", async (req, res) => {
 	try {
-		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
 		const COUNT = 5; //numbers of games to display
 
-		if (!apiKey || !steamId) {
+		if (!steamId) {
 			throw new HttpError("Missing required parameters: key, steamid", 400);
 		}
 
@@ -106,11 +105,10 @@ apiRouter.get("/getRecentlyPlayedGames", async (req, res) => {
 
 apiRouter.get("/getOwnedGames", async (req, res) => {
 	try {
-		const apiKey = req.query.key;
 		const steamId = req.query.steamid;
 
 		if (!apiKey || !steamId) {
-			throw new HttpError("Missing required parameters: key, steamid", 400);
+			throw new HttpError("Missing required parameters: steamid", 400);
 		}
 
 		const response = await fetch(

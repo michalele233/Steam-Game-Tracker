@@ -9,11 +9,11 @@ export default function Header() {
 		useContext(SteamContext);
 
 	const handleSignIn = () => {
-		window.location.href = "http://localhost:3000/auth/steam";
+		window.location.href = "https://51.21.65.188:3000/auth/steam";
 	};
 
 	const handleSignOut = () => {
-		window.location.href = "http://localhost:3000/logout";
+		window.location.href = "https://51.21.65.188:3000/logout";
 		setIsAuthenticated(false);
 		setSteamId(null);
 	};

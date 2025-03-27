@@ -7,7 +7,7 @@ import SteamContext from "../contexts/Steam-context";
 import ContentContainer from "../UI/ContentContainer";
 import FetchError from "../UI/FetchError";
 export default function RecentlyPlayedGames() {
-	const { steamId, apiKey } = useContext(SteamContext);
+	const { steamId } = useContext(SteamContext);
 
 	const {
 		data: gamesData,
@@ -17,7 +17,7 @@ export default function RecentlyPlayedGames() {
 	} = useQuery({
 		queryFn: () =>
 			fetchData(
-				`http://localhost:3000/getRecentlyPlayedGames?key=${apiKey}&steamid=${steamId}`
+				`https://51.21.65.188:3000/getRecentlyPlayedGames?steamid=${steamId}`
 			),
 		queryKey: ["recentlyPlayedGames", steamId],
 	});
