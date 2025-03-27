@@ -34,8 +34,8 @@ passport.deserializeUser(function (obj, done) {
 passport.use(
 	new SteamStrategy(
 		{
-			returnURL: "http://51.21.65.188:3000/auth/steam/return",
-			realm: "http://51.21.65.188:3000/",
+			returnURL: "https://michalele23.live/auth/steam/return",
+			realm: "https://michalele23.live:3000/",
 			apiKey: apiKey,
 		},
 		function (identifier, profile, done) {

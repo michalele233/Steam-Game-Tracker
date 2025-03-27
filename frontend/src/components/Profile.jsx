@@ -20,7 +20,7 @@ export default function Profile() {
 	} = useQuery({
 		queryFn: () =>
 			fetchData(
-				`https://51.21.65.188:3000/getPlayerSummaries?steamids=${steamId}`
+				`https://michalele23.live/getPlayerSummaries?steamids=${steamId}`
 			),
 		queryKey: ["profile", steamId],
 	});

@@ -17,7 +17,7 @@ export default function RecentlyPlayedGames() {
 	} = useQuery({
 		queryFn: () =>
 			fetchData(
-				`https://51.21.65.188:3000/getRecentlyPlayedGames?steamid=${steamId}`
+				`https://michalele23.live/getRecentlyPlayedGames?steamid=${steamId}`
 			),
 		queryKey: ["recentlyPlayedGames", steamId],
 	});

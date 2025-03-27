@@ -22,7 +22,7 @@ const App = () => {
 	useEffect(() => {
 		const fetchAuthStatus = async () => {
 			try {
-				const response = await fetch("https://51.21.65.188:3000/auth/status", {
+				const response = await fetch("https://michalele23.live/auth/status", {
 					credentials: "include",
 				});
 				if (response.ok) {

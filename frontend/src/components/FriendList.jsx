@@ -27,7 +27,7 @@ export default function FriendList() {
 		const maxFriends = friends.splice(0, 100); // Steam API only allows 100 friends per request
 		const friendIds = maxFriends.map(friend => friend.steamid).join(",");
 		const response = await fetch(
-			`https://51.21.65.188:3000/getPlayerSummaries?steamids=${friendIds}`
+			`https://michalele23.live/getPlayerSummaries?steamids=${friendIds}`
 		);
 		if (response.ok) {
 			const data = await response.json();
@@ -43,7 +43,7 @@ export default function FriendList() {
 	} = useQuery({
 		queryFn: () =>
 			fetchData(
-				`https://51.21.65.188:3000/getFriendList?steamid=${steamId}`,
+				`https://michalele23.live/getFriendList?steamid=${steamId}`,
 				addNameToFriendList
 			),
 		queryKey: ["friendList", steamId],

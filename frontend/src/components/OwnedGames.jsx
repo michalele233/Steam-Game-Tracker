@@ -20,7 +20,7 @@ export default function OwnedGames() {
 		error,
 	} = useQuery({
 		queryFn: () =>
-			fetchData(`https://51.21.65.188:3000/getOwnedGames?steamid=${steamId}`),
+			fetchData(`https://michalele23.live/getOwnedGames?steamid=${steamId}`),
 		queryKey: ["ownedGames", steamId],
 	});
 
