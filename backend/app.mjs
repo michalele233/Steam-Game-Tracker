@@ -6,7 +6,7 @@ import SteamStrategy from "passport-steam";
 
 import apiRouter from "./routes/apiRoutes.mjs";
 import steamRouter from "./routes/steamAuthRoutes.mjs";
-import apiKey from "../getApiKey.js";
+import apiKey from "./getApiKey.js";
 
 dotenv.config({ path: "../.env" });
 
@@ -35,7 +35,7 @@ passport.use(
 	new SteamStrategy(
 		{
 			returnURL: "https://michalele23.live/auth/steam/return",
-			realm: "https://michalele23.live:3000/",
+			realm: "https://michalele23.live/",
 			apiKey: apiKey,
 		},
 		function (identifier, profile, done) {
@@ -54,7 +54,7 @@ app.use(
 		secret: "secret",
 		saveUninitialized: false,
 		resave: false,
-		cookie: { secure: false, httpOnly: true }, //secure:true for https then add sameSite: "None" for cross-site cookies
+		cookie: { secure: true, httpOnly: true, sameSite: "none" },
 	})
 );
 
