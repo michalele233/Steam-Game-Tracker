@@ -1,3 +1,4 @@
+//problem z API KEY chuj wie jak to zrobic
 import AWS from "aws-sdk";
 
 const ssm = new AWS.SSM({
@@ -9,9 +10,13 @@ async function getApiKey() {
 		Name: "SteamApiKey",
 		WithDecryption: true,
 	};
-	const response = await ssm.getParameter(params).promise();
-	return response.Parameter.Value;
+	try {
+		const response = await ssm.getParameter(params).promise();
+		return response.Parameter.Value;
+	} catch (error) {
+		console.error("Error fetching Steam API Key:", error.message);
+		throw error;
+	}
 }
 
-const result = await getApiKey();
-export default result;
+export default getApiKey;

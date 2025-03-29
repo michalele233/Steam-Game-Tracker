@@ -1,7 +1,29 @@
 import express from "express";
-import apiKey from "../getApiKey.js";
+import getApiKey from "../getApiKey.js";
+
+let apiKey;
 
 const apiRouter = express.Router();
+
+async function initializeApiKey() {
+	try {
+		apiKey = await getApiKey();
+	} catch (error) {
+		console.error("Failed to fetch API Key:", error.message);
+		throw new Error("API Key initialization failed");
+	}
+}
+
+apiRouter.use(async (req, res, next) => {
+	if (!apiKey) {
+		try {
+			await initializeApiKey();
+		} catch (error) {
+			return res.status(500).json({ message: "Failed to initialize API Key" });
+		}
+	}
+	next();
+});
 
 class HttpError extends Error {
 	constructor(message, status) {

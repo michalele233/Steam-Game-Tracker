@@ -3,52 +3,43 @@ import session from "express-session";
 import dotenv from "dotenv";
 import passport from "passport";
 import SteamStrategy from "passport-steam";
+import cors from "cors";
 
 import apiRouter from "./routes/apiRoutes.mjs";
 import steamRouter from "./routes/steamAuthRoutes.mjs";
-import apiKey from "./getApiKey.js";
+import getApiKey from "./getApiKey.js";
 
 dotenv.config({ path: "../.env" });
 
 const app = express();
 const port = 3000;
-app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "https://michalele233.github.io");
-	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
-	);
-	res.header("Access-Control-Allow-Credentials", "true");
-	next();
-});
 
-passport.serializeUser(function (user, done) {
-	done(null, user);
-});
+let apiKey;
 
-passport.deserializeUser(function (obj, done) {
-	done(null, obj);
-});
+app.set("trust proxy", 1);
 
-passport.use(
-	new SteamStrategy(
-		{
-			returnURL: "https://michalele23.live/auth/steam/return",
-			realm: "https://michalele23.live/",
-			apiKey: apiKey,
-		},
-		function (identifier, profile, done) {
-			process.nextTick(function () {
-				profile.id = identifier;
-				return done(null, profile);
-			});
-		}
-	)
+// Funkcja do inicjalizacji klucza API
+async function initializeApiKey() {
+	try {
+		apiKey = await getApiKey();
+	} catch (error) {
+		console.error("Failed to fetch API Key:", error.message);
+		throw new Error("API Key initialization failed");
+	}
+}
+
+app.use(
+	cors({
+		origin: "https://michalele233.github.io",
+		methods: ["GET", "POST", "PUT", "DELETE"],
+		credentials: true,
+	})
 );
 
+// Middleware JSON
 app.use(express.json());
 
+// Middleware sesji
 app.use(
 	session({
 		secret: "secret",
@@ -58,12 +49,60 @@ app.use(
 	})
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use(apiRouter);
-app.use(steamRouter);
-
-app.listen(port, () => {
-	console.log(`Server is running on port ${port}`);
+app.use((req, res, next) => {
+	console.log("X-Forwarded-Proto:", req.headers["x-forwarded-proto"]);
+	console.log("Host:", req.headers["host"]);
+	console.log("Cookies:", req.headers["cookie"]);
+	console.log("Session ID:", req.sessionID);
+	console.log("Session data:", req.session);
+	next();
 });
+
+// Konfiguracja Passport.js
+passport.serializeUser(function (user, done) {
+	done(null, user);
+});
+
+passport.deserializeUser(function (obj, done) {
+	done(null, obj);
+});
+
+// Inicjalizacja klucza API i Passport.js
+(async () => {
+	try {
+		await initializeApiKey(); // Inicjalizacja klucza API
+
+		// Konfiguracja strategii Steam
+		passport.use(
+			new SteamStrategy(
+				{
+					returnURL: "https://michalele23.live/auth/steam/return",
+					realm: "https://michalele23.live/",
+					apiKey: apiKey, // Użycie zainicjalizowanego klucza API
+				},
+				function (identifier, profile, done) {
+					process.nextTick(function () {
+						profile.id = identifier;
+						return done(null, profile);
+					});
+				}
+			)
+		);
+
+		// Inicjalizacja Passport.js
+		app.use(passport.initialize());
+		app.use(passport.session());
+
+		// Routing
+		app.use(apiRouter);
+		app.use(steamRouter);
+
+		// Uruchomienie serwera
+		app.listen(port, () => {
+			console.log(`Server is running on port ${port}`);
+		});
+	} catch (error) {
+		console.error("Failed to initialize application:", error.message);
+		process.exit(1); // Zakończ aplikację, jeśli inicjalizacja się nie powiedzie
+	}
+})();

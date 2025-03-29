@@ -13,7 +13,7 @@ export default function Header() {
 	};
 
 	const handleSignOut = () => {
-		window.location.href = "https://michalele/logout";
+		window.location.href = "https://michalele23.live/logout";
 		setIsAuthenticated(false);
 		setSteamId(null);
 	};

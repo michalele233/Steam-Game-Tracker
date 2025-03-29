@@ -73,7 +73,7 @@ export default function FriendList() {
 									}}>
 									<div className='flex items-center gap-2'>
 										<ImageComponent
-											src={friend.avatar}
+											src={`${friend.avatar.slice(0, -4)}_full.jpg`}
 											alt={`${friend.personaname}'s avatar`}
 											className='h-8 w-8 rounded-full'></ImageComponent>
 										<span>{friend.personaname}</span>
