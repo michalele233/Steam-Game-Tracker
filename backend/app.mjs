@@ -49,15 +49,6 @@ app.use(
 	})
 );
 
-app.use((req, res, next) => {
-	console.log("X-Forwarded-Proto:", req.headers["x-forwarded-proto"]);
-	console.log("Host:", req.headers["host"]);
-	console.log("Cookies:", req.headers["cookie"]);
-	console.log("Session ID:", req.sessionID);
-	console.log("Session data:", req.session);
-	next();
-});
-
 // Konfiguracja Passport.js
 passport.serializeUser(function (user, done) {
 	done(null, user);
