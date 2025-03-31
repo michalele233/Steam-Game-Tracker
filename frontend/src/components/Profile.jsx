@@ -31,11 +31,11 @@ export default function Profile() {
 	};
 
 	return (
-		<ContentContainer className='md:h-[600px]'>
+		<ContentContainer className='md:h-[600px] items-start'>
 			{isPending && <p>Loading...</p>}
 			{isError && <FetchError error={error} />}
 			{profileData && (
-				<div className='flex flex-col items-center space-y-4 p-4 text-lg md:max-lg:text-base'>
+				<div className='flex flex-col justify-center items-center space-y-4 p-4 text-lg md:max-lg:text-base text-center'>
 					<h2 className='mb-8 text-2xl'>{profileData[0].personaname}</h2>
 					<img
 						src={profileData[0].avatarfull}
